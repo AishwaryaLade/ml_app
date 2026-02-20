@@ -1,14 +1,36 @@
-import torch
-import numpy as np
-from model import load_model
+import os
+import joblib
+import pandas as pd
 
-MODEL_PATH = "backend/multilinear_model.pth"
-INPUT_DIM = 13   # change to your feature count
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+MODEL_PATH = os.path.join(BASE_DIR, "backend", "machine_output.pkl")
 
-model = load_model(INPUT_DIM, MODEL_PATH)
+model = joblib.load(MODEL_PATH)
 
-def predict(data):
-    x = torch.FloatTensor([data])
-    with torch.no_grad():
-        pred = model(x)
-    return pred.item()
+def make_prediction(features):
+
+    columns = [
+        'Injection_Temperature',
+        'Injection_Pressure',
+        'Cycle_Time',
+        'Cooling_Time',
+        'Material_Viscosity',
+        'Ambient_Temperature',
+        'Machine_Age',
+        'Operator_Experience',
+        'Maintenance_Hours',
+        'Shift',
+        'Machine_Type',
+        'Material_Grade',
+        'Day_of_Week',
+        'Temperature_Pressure_Ratio',
+        'Total_Cycle_Time',
+        'Efficiency_Score',
+        'Machine_Utilization'
+    ]
+
+    df = pd.DataFrame([features], columns=columns)
+
+    prediction = model.predict(df)
+
+    return prediction[0]

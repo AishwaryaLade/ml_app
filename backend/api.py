@@ -1,17 +1,17 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
-from backend.predict import predict
+from backend.predict import make_prediction
 
 app = FastAPI()
 
 class InputData(BaseModel):
-    features: list[float]
+    features: list
 
 @app.get("/")
 def home():
-    return {"message": "API running"}
+    return {"message": "ML Prediction API Running"}
 
 @app.post("/predict")
-def get_prediction(data: InputData):
-    result = predict(data.features)
+def predict(data: InputData):
+    result = make_prediction(data.features)
     return {"prediction": result}
