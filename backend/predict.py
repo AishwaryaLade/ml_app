@@ -2,10 +2,12 @@ import os
 import joblib
 import pandas as pd
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-MODEL_PATH = os.path.join(BASE_DIR, "backend", "machine_output.pkl")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+MODEL_PATH = os.path.join(BASE_DIR, "machine_output.pkl")
 
+print("Loading model from:", MODEL_PATH)
 model = joblib.load(MODEL_PATH)
+
 
 def make_prediction(features):
 
